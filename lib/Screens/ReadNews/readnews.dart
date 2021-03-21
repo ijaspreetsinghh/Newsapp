@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:newsapp/constants.dart';
 import 'dart:ui';
 
-import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class ReadNews extends StatefulWidget {
   static const id = 'read';
@@ -28,6 +32,37 @@ class ReadNews extends StatefulWidget {
 }
 
 class _ReadNewsState extends State<ReadNews> {
+  Completer<WebViewController> _controller = Completer<WebViewController>();
+  void _modalBottomSheetMenu() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        enableDrag: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        isDismissible: true,
+        builder: (builder) {
+          return Container(
+            height: MediaQuery.of(context).size.height - 200,
+            padding: EdgeInsets.only(top: kPadding * 2),
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(kRoundedcornersradius),
+                    topRight: const Radius.circular(kRoundedcornersradius))),
+            child: WebView(
+              initialUrl: widget.url,
+              gestureRecognizers: Set()
+                ..add(Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer())),
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController controller) {
+                _controller.complete(controller);
+              },
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -144,12 +179,11 @@ class _ReadNewsState extends State<ReadNews> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: () => launch(widget.url),
+                      onPressed: () => _modalBottomSheetMenu(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Read full news  '),
-                          Icon(Icons.open_in_new_rounded)
+                          Text('Read full news'),
                         ],
                       ),
                     ),

@@ -9,7 +9,7 @@
         <option name="gradleJvm" value="JDK" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/url_launcher-6.0.2/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/webview_flutter-2.0.2/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
           </set>
